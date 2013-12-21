@@ -46,7 +46,7 @@ protected:
         int ret = pool.size();
         assert(ret == _numBufs);
         std::list<boost::intrusive_ptr<RefCntBuffer> >::iterator it;
-        for (it = pool.begin(); it != pool.end(); it++)
+        for (it = pool.begin(); it != pool.end();)
         {
             boost::intrusive_ptr<RefCntBuffer> b = *it;
             b->dead();
@@ -107,8 +107,8 @@ void RefCntBuffer::finalRelease(IntrusivePtrBase* s) const
     {
         RefCntBuffer* p = dynamic_cast<RefCntBuffer*>(s);
         p->_pool.reset();
-        std::cout << "delete " << s << std::endl;
-        delete s;
+        std::cout << "delete " << p << std::endl;
+        delete p;
     }
     else
     {

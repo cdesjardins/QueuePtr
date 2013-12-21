@@ -4,6 +4,7 @@
 #include "IntrusivePtrBase.h"
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/asio/buffer.hpp>
+
 class RefCntBufferPool_;
 
 class RefCntBuffer : public IntrusivePtrBase
@@ -25,7 +26,7 @@ public:
 
     ~RefCntBuffer()
     {
-        delete _backingData;
+        delete []_backingData;
     }
 
     boost::asio::mutable_buffer _buffer;

@@ -42,6 +42,7 @@ protected:
     void dead()
     {
         _dead = true;
+        std::cout << "dead " << this << std::endl;
     }
 
     virtual void finalRelease(IntrusivePtrBase* s) const;

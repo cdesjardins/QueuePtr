@@ -28,6 +28,7 @@ struct IntrusivePtrBase
     {
         if (--s->_refCount == 0)
         {
+            std::cout << "finalRelease: " << s << std::endl;
             s->finalRelease(s);
         }
     }

@@ -29,7 +29,7 @@ public:
     {
     }
 protected:
-    RefCntBufferPool_::RefCntBufferPool_()
+    RefCntBufferPool_()
         : ThreadSafePool<RefCntBuffer>()
     {
     }
@@ -50,9 +50,10 @@ protected:
         {
             boost::intrusive_ptr<RefCntBuffer> b = *it;
             b->dead();
-            RefCntBuffer *pb = b.get();
+            //RefCntBuffer *pb = b.get();
             it = pool.erase(it);
-            delete pb;
+            //std::cout << "delete " << pb << std::endl;
+            //delete pb;
         }
         return -ret;
     }
@@ -77,6 +78,7 @@ RefCntBufferPool::RefCntBufferPool(const int initialBufs)
 RefCntBufferPool::~RefCntBufferPool()
 {
     _pool->destroyPool();
+    _pool.reset();
 }
 
 bool RefCntBufferPool::dequeue(boost::intrusive_ptr<RefCntBuffer> &data)
@@ -105,6 +107,8 @@ void RefCntBuffer::finalRelease(IntrusivePtrBase* s) const
     {
         RefCntBuffer* p = dynamic_cast<RefCntBuffer*>(s);
         p->_pool.reset();
+        std::cout << "delete " << s << std::endl;
+        delete s;
     }
     else
     {

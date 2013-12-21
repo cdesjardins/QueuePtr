@@ -23,7 +23,7 @@ if(MSVC)
 endif()
 
 message(STATUS ${BOOSTDIR})
-include_directories($ENV{BOOST_LIBRARYDIR})
+include_directories($ENV{BOOST_ROOT})
 add_definitions(-DBOOST_ALL_NO_LIB)
 file(GLOB SRCS
     ${SRCS}

@@ -3,30 +3,20 @@
 
 #include "ThreadSafePool.h"
 #include "RefCntBuffer.h"
+#include <boost/bind.hpp>
 
-class RefCntBufferPool : public ThreadSafePool<RefCntBuffer>
+class RefCntBufferPool_;
+
+class RefCntBufferPool
 {
 public:
-    static boost::shared_ptr<RefCntBufferPool> createPool(int initialBufs)
-    {
-        boost::shared_ptr<RefCntBufferPool> ret(new RefCntBufferPool());
-        ret->_sharedThis = ret;
-        ret->addToPool(initialBufs);
-        return ret;
-    }
-protected:
-    RefCntBufferPool::RefCntBufferPool()
-        : ThreadSafePool<RefCntBuffer>()
-    {
-    }
+    RefCntBufferPool(const int initialBufs);
+    ~RefCntBufferPool();
+    virtual bool dequeue(boost::intrusive_ptr<RefCntBuffer> &data);
+    virtual void enqueue(const boost::intrusive_ptr<RefCntBuffer> &data);
 
-    boost::intrusive_ptr<RefCntBuffer> allocateBuffer(void) const
-    {
-        static int _bufId;
-        boost::intrusive_ptr<RefCntBuffer> bfrPtr(new RefCntBuffer(_sharedThis));
-        return bfrPtr;
-    }
-    boost::shared_ptr<RefCntBufferPool> _sharedThis;
+protected:
+    boost::shared_ptr<RefCntBufferPool_> _pool;
 };
 
 #endif

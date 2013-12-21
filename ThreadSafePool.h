@@ -15,6 +15,7 @@ public:
 
 protected:
     ThreadSafePool()
+        : _numBufs(0)
     {
     }
     void addToPool(int num)
@@ -23,9 +24,11 @@ protected:
         {
             ThreadSafeQueue<boost::intrusive_ptr<T> >::enqueue(allocateBuffer());
         }
+        _numBufs += num;
     }
 
-    virtual boost::intrusive_ptr<T> allocateBuffer() const = 0;
+    virtual boost::intrusive_ptr<T> allocateBuffer() = 0;
+    int _numBufs;
 };
 
 #endif // THREADSAFEPOOL_H

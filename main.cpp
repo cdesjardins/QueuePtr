@@ -1,11 +1,16 @@
+#include <iostream>
 #include "RefCntBufferPool.h"
 
 int main()
 { 
-    boost::shared_ptr<RefCntBufferPool> _pool = RefCntBufferPool::createPool(100);
-    boost::intrusive_ptr<RefCntBuffer> x;
-    boost::intrusive_ptr<RefCntBuffer> y;
-    _pool->dequeue(x);
-    y = x;
-    x.reset();
+    {
+        boost::shared_ptr<RefCntBufferPool> _pool(new RefCntBufferPool(100));
+        for (int i = 0; i < 1000; i++)
+        {
+            boost::intrusive_ptr<RefCntBuffer> x;
+            _pool->dequeue(x);
+            x.reset();
+        }
+    }
+    std::cout << "done" << std::endl;
 }

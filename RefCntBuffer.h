@@ -13,36 +13,33 @@ public:
         : _pool(pool),
         _dead(false)
     {
+        _backingData = new char[refCntBufferSize + 1];
+        resetBackingData();
     }
 
-    RefCntBuffer(const RefCntBuffer& rhs) 
+    RefCntBuffer(const RefCntBuffer& rhs)
         : _pool(rhs._pool),
         _dead(false)
     {
     }
 
-    const RefCntBuffer operator=(const RefCntBuffer& rhs)
-    {
-        if(this != &rhs)
-        {
-            _pool = rhs._pool;
-            _dead = false;
-        }
-        return *this;
-    }
     ~RefCntBuffer()
     {
-        std::cout << "RefCntBuffer gone" << std::endl;
+        delete _backingData;
     }
 
     boost::asio::mutable_buffer _buffer;
 
 protected:
     friend class RefCntBufferPool_;
+    void resetBackingData()
+    {
+        _buffer = boost::asio::buffer(_backingData, refCntBufferSize);
+    }
+
     void dead()
     {
         _dead = true;
-        std::cout << "dead " << this << std::endl;
     }
 
     virtual void finalRelease(IntrusivePtrBase* s) const;
@@ -50,6 +47,9 @@ protected:
 private:
     boost::shared_ptr<RefCntBufferPool_> _pool;
     bool _dead;
+    char* _backingData;
+    static const int refCntBufferSize = 1024;
+    const RefCntBuffer operator=(const RefCntBuffer& rhs);
 };
 
 #endif

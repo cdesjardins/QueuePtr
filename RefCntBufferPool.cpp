@@ -28,13 +28,24 @@ public:
     ~RefCntBufferPool_()
     {
     }
+
+    bool dequeue(boost::intrusive_ptr<RefCntBuffer> &data)
+    {
+        bool ret = ThreadSafePool<RefCntBuffer>::dequeue(data);
+        // Make sure the buffer is pointing to the start of the allocated block
+        // and that the buffer is the correct size.
+        data->resetBackingData();
+        return ret;
+    }
+
 protected:
+
     RefCntBufferPool_()
         : ThreadSafePool<RefCntBuffer>()
     {
     }
 
-    boost::intrusive_ptr<RefCntBuffer> allocateBuffer(void)
+    boost::intrusive_ptr<RefCntBuffer> allocateBuffer()
     {
         static int _bufId;
         boost::intrusive_ptr<RefCntBuffer> bfrPtr(new RefCntBuffer(_sharedThis));
@@ -50,10 +61,7 @@ protected:
         {
             boost::intrusive_ptr<RefCntBuffer> b = *it;
             b->dead();
-            //RefCntBuffer *pb = b.get();
             it = pool.erase(it);
-            //std::cout << "delete " << pb << std::endl;
-            //delete pb;
         }
         return -ret;
     }
@@ -107,7 +115,6 @@ void RefCntBuffer::finalRelease(IntrusivePtrBase* s) const
     {
         RefCntBuffer* p = dynamic_cast<RefCntBuffer*>(s);
         p->_pool.reset();
-        std::cout << "delete " << p << std::endl;
         delete p;
     }
     else

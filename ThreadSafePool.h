@@ -28,3 +28,4 @@ protected:
 };
 
 #endif // THREADSAFEPOOL_H
+

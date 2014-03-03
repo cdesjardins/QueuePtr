@@ -18,16 +18,16 @@ protected:
         : _numBufs(0)
     {
     }
-    void addToPool(int num)
+    void addToPool(int num, const int bufferSize)
     {
         for (int i = 0; i < num; i++)
         {
-            ThreadSafeQueue<boost::intrusive_ptr<T> >::enqueue(allocateBuffer());
+            ThreadSafeQueue<boost::intrusive_ptr<T> >::enqueue(allocateBuffer(bufferSize));
         }
         _numBufs += num;
     }
 
-    virtual boost::intrusive_ptr<T> allocateBuffer() = 0;
+    virtual boost::intrusive_ptr<T> allocateBuffer(const int bufferSize) = 0;
     int _numBufs;
 };
 

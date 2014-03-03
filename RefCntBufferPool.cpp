@@ -11,11 +11,11 @@
 class RefCntBufferPool_ : public ThreadSafePool<RefCntBuffer>
 {
 public:
-    static boost::shared_ptr<RefCntBufferPool_> createPool(const int initialBufs)
+    static boost::shared_ptr<RefCntBufferPool_> createPool(const int initialBufs, const int bufferSize)
     {
         boost::shared_ptr<RefCntBufferPool_> ret(new RefCntBufferPool_());
         ret->_sharedThis = ret;
-        ret->addToPool(initialBufs);
+        ret->addToPool(initialBufs, bufferSize);
         return ret;
     }
 
@@ -45,10 +45,10 @@ protected:
     {
     }
 
-    boost::intrusive_ptr<RefCntBuffer> allocateBuffer()
+    boost::intrusive_ptr<RefCntBuffer> allocateBuffer(const int bufferSize)
     {
         static int _bufId;
-        boost::intrusive_ptr<RefCntBuffer> bfrPtr(new RefCntBuffer(_sharedThis));
+        boost::intrusive_ptr<RefCntBuffer> bfrPtr(new RefCntBuffer(_sharedThis, bufferSize));
         return bfrPtr;
     }
 
@@ -78,9 +78,9 @@ protected:
 **  also deleted.
 */
 
-RefCntBufferPool::RefCntBufferPool(const int initialBufs)
+RefCntBufferPool::RefCntBufferPool(const int initialBufs, const int bufferSize)
 {
-    _pool = RefCntBufferPool_::createPool(initialBufs);
+    _pool = RefCntBufferPool_::createPool(initialBufs, bufferSize);
 }
 
 RefCntBufferPool::~RefCntBufferPool()

@@ -10,17 +10,19 @@ class RefCntBufferPool_;
 class RefCntBuffer : public IntrusivePtrBase
 {
 public:
-    RefCntBuffer(boost::shared_ptr<RefCntBufferPool_> pool) 
+    RefCntBuffer(boost::shared_ptr<RefCntBufferPool_> pool, const int bufferSize)
         : _pool(pool),
-        _dead(false)
+        _dead(false),
+        _bufferSize(bufferSize)
     {
-        _backingData = new char[refCntBufferSize + 1];
+        _backingData = new char[_bufferSize + 1];
         resetBackingData();
     }
 
     RefCntBuffer(const RefCntBuffer& rhs)
         : _pool(rhs._pool),
-        _dead(false)
+        _dead(false),
+        _bufferSize(rhs._bufferSize)
     {
     }
 
@@ -35,7 +37,7 @@ protected:
     friend class RefCntBufferPool_;
     void resetBackingData()
     {
-        _buffer = boost::asio::buffer(_backingData, refCntBufferSize);
+        _buffer = boost::asio::buffer(_backingData, _bufferSize);
     }
 
     void dead()
@@ -49,7 +51,7 @@ private:
     boost::shared_ptr<RefCntBufferPool_> _pool;
     bool _dead;
     char* _backingData;
-    static const int refCntBufferSize = 1024;
+    const int _bufferSize;
     const RefCntBuffer operator=(const RefCntBuffer& rhs);
 };
 

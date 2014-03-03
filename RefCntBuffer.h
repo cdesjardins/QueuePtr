@@ -20,13 +20,14 @@ public:
     }
 
     RefCntBuffer(const RefCntBuffer& rhs)
-        : _pool(rhs._pool),
+        : IntrusivePtrBase(rhs),
+        _pool(rhs._pool),
         _dead(false),
         _bufferSize(rhs._bufferSize)
     {
     }
 
-    ~RefCntBuffer()
+    virtual ~RefCntBuffer()
     {
         delete []_backingData;
     }

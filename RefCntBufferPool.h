@@ -11,7 +11,7 @@ class RefCntBufferPool
 {
 public:
     RefCntBufferPool(const int initialBufs, const int bufferSize);
-    ~RefCntBufferPool();
+    virtual ~RefCntBufferPool();
     virtual bool dequeue(boost::intrusive_ptr<RefCntBuffer> &data);
     virtual void enqueue(const boost::intrusive_ptr<RefCntBuffer> &data);
 

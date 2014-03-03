@@ -47,7 +47,6 @@ protected:
 
     boost::intrusive_ptr<RefCntBuffer> allocateBuffer(const int bufferSize)
     {
-        static int _bufId;
         boost::intrusive_ptr<RefCntBuffer> bfrPtr(new RefCntBuffer(_sharedThis, bufferSize));
         return bfrPtr;
     }

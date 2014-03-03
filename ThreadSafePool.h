@@ -7,12 +7,7 @@
 template <class T> class ThreadSafePool : public ThreadSafeQueue<boost::intrusive_ptr<T> >
 {
 public:
-#if 0
-    virtual bool dequeue(boost::intrusive_ptr<T> &data)
-    {
-        return ThreadSafeQueue<boost::intrusive_ptr<T> >::dequeue(data);
-    }
-#endif
+
 protected:
     ThreadSafePool()
         : _numBufs(0)

@@ -34,7 +34,10 @@ public:
         bool ret = ThreadSafePool<RefCntBuffer>::dequeue(data);
         // Make sure the buffer is pointing to the start of the allocated block
         // and that the buffer is the correct size.
-        data->resetBackingData();
+        if (data)
+        {
+            data->resetBackingData();
+        }
         return ret;
     }
 
@@ -90,6 +93,7 @@ RefCntBufferPool::~RefCntBufferPool()
 
 bool RefCntBufferPool::dequeue(boost::intrusive_ptr<RefCntBuffer> &data)
 {
+    data.reset();
     return _pool->dequeue(data);
 }
 

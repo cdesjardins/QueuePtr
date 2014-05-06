@@ -28,7 +28,7 @@ find_library(BOOST_SYSTEM libboost_system${CMAKE_STATIC_LIBRARY_SUFFIX} ${BOOSTD
 find_library(BOOST_CHRONO libboost_chrono${CMAKE_STATIC_LIBRARY_SUFFIX} ${BOOSTDIR})
 find_library(BOOST_THREAD libboost_thread${CMAKE_STATIC_LIBRARY_SUFFIX} ${BOOSTDIR})
 add_definitions(-DBOOST_ALL_NO_LIB)
-
-target_link_libraries(QueuePtrTester ${BOOST_SYSTEM} ${BOOST_CHRONO} ${BOOST_THREAD} QueuePtr)
+message(STATUS ${BOOST_CHRONO})
+target_link_libraries(QueuePtrTester QueuePtr ${BOOST_SYSTEM} ${BOOST_CHRONO} ${BOOST_THREAD})
 include_directories($ENV{BOOST_ROOT}  ../include)
 include(compilerflags)

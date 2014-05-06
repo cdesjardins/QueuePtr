@@ -2,7 +2,6 @@
 #define INTRUSIVE_PTR_BASE_Hxx
 
 #include <boost/detail/atomic_count.hpp>
-#include <boost/smart_ptr/intrusive_ptr.hpp>
 
 struct IntrusivePtrBase
 {

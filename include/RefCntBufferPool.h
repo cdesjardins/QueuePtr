@@ -1,9 +1,8 @@
 #ifndef REF_CNT_BUFFER_POOL_Hxx
 #define REF_CNT_BUFFER_POOL_Hxx
 
-#include "ThreadSafePool.h"
 #include "RefCntBuffer.h"
-#include <boost/bind.hpp>
+#include <boost/smart_ptr/intrusive_ptr.hpp>
 
 class RefCntBufferPool_;
 

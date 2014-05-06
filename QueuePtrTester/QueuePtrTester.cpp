@@ -5,14 +5,14 @@
 void useBufs(boost::shared_ptr<RefCntBufferPool> pool)
 {
     int failCnt = 0;
-	for (int i = 0; i < 1000; i++)
-	{
-		boost::intrusive_ptr<RefCntBuffer> x;
-		pool->dequeue(x);
-		pool->dequeue(x);
+    for (int i = 0; i < 1000; i++)
+    {
+        boost::intrusive_ptr<RefCntBuffer> x;
+        pool->dequeue(x);
+        pool->dequeue(x);
         if (x)
         {
-    		boost::intrusive_ptr<RefCntBuffer> y;
+            boost::intrusive_ptr<RefCntBuffer> y;
             y = x;
             y->_buffer = boost::asio::buffer(y->_buffer + 10, 100);
             boost::asio::buffer_copy(y->_buffer, boost::asio::buffer("hello"));
@@ -22,13 +22,13 @@ void useBufs(boost::shared_ptr<RefCntBufferPool> pool)
         {
             failCnt++;
         }
-	}
+    }
     std::cout << "done " << failCnt << std::endl;
 }
 
 int main()
 {
-	boost::shared_ptr<RefCntBufferPool> pool(new RefCntBufferPool(700, 1024));
+    boost::shared_ptr<RefCntBufferPool> pool(new RefCntBufferPool(700, 1024));
     boost::thread t0[1024];
     for (int i = 0; i < (sizeof(t0) / sizeof(t0[0])); i++)
     {

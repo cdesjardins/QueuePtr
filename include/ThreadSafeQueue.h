@@ -41,49 +41,30 @@ public:
         }
     }
 
-    virtual bool dequeue(T &data)
+    virtual bool dequeue(T &data, const int msTimeout = 0)
     {
         bool ret = false;
         { // create a new scope for the mutex
             boost::mutex::scoped_lock lock(_queueMutex);
+            waitForData(msTimeout);
             ret = popData(data);
         }
         return ret;
     }
 
-    virtual std::size_t dequeueBatch(std::vector<T> &dataVec)
+    // Dequeue everything
+    virtual size_t dequeue(std::vector<T> &dataVec, const int msTimeout = 0)
     {
-        std::size_t size = 0;
+        size_t size = 0;
         { // create a new scope for the mutex
             boost::mutex::scoped_lock lock(_queueMutex);
-            size = popDataBatch(dataVec);
+            waitForData(msTimeout);
+            size = popData(dataVec);
         }
         return size;
     }
 
-    virtual bool waitDequeue(T &data, const int msTimeout = -1)
-    {
-        bool ret = false;
-        { // create a new scope for the mutex
-            boost::mutex::scoped_lock lock(_queueMutex);
-            waitForData(msTimeout);
-            ret = popData(data);
-        }
-        return ret;
-    }
-
-    virtual bool waitFront(T &data, const int msTimeout = -1)
-    {
-        bool ret = false;
-        { // create a new scope for the mutex
-            boost::mutex::scoped_lock lock(_queueMutex);
-            waitForData(msTimeout);
-            ret = frontData(data);
-        }
-        return ret;
-    }
-
-    int size() const
+    size_t size() const
     {
         return _numEnqueued;
     }
@@ -114,23 +95,26 @@ protected:
 
     void waitForData(const int msTimeout)
     {
-        // This function assumes that _queueMutex is locked already!
-        boost::chrono::system_clock::time_point timeLimit = boost::chrono::system_clock::now() + boost::chrono::milliseconds(msTimeout);
-        while (_queue.empty() == true)
+        if (msTimeout != 0)
         {
-            // if timeout is specified, then wait until the time is up
-            // otherwise wait forever (forever is msTimeout = -1)
-            if (msTimeout >= 0)
+            // This function assumes that _queueMutex is locked already!
+            boost::chrono::system_clock::time_point timeLimit = boost::chrono::system_clock::now() + boost::chrono::milliseconds(msTimeout);
+            while (_queue.empty() == true)
             {
-                _msgNotification.wait_until(_queueMutex, timeLimit);
-                if (boost::chrono::system_clock::now() >= timeLimit)
+                // if timeout is specified, then wait until the time is up
+                // otherwise wait forever (forever is msTimeout = -1)
+                if (msTimeout > 0)
                 {
-                    break;
+                    _msgNotification.wait_until(_queueMutex, timeLimit);
+                    if (boost::chrono::system_clock::now() >= timeLimit)
+                    {
+                        break;
+                    }
                 }
-            }
-            else
-            {
-                _msgNotification.wait(_queueMutex);
+                else
+                {
+                    _msgNotification.wait(_queueMutex);
+                }
             }
         }
     }
@@ -156,10 +140,10 @@ protected:
         return ret;
     }
 
-    std::size_t popDataBatch(std::vector<T>& dataVec)
+    size_t popData(std::vector<T>& dataVec)
     {
         // This function assumes that _queueMutex is locked already!
-        std::size_t size = 0;
+        size_t size = 0;
         T data;
         while (popData(data) == true)
         {
@@ -169,19 +153,7 @@ protected:
         return size;
     }
 
-    bool frontData(T &data)
-    {
-        // This function assumes that _queueMutex is locked already!
-        bool ret = false;
-        if (_queue.empty() == false)
-        {
-            data = _queue.front();
-            ret = true;
-        }
-        return ret;
-    }
-
-    virtual std::size_t sizeOfData(const T&) const
+    virtual size_t sizeOfData(const T&) const
     {
         return sizeof(T);
     }
@@ -189,7 +161,7 @@ protected:
     std::list<T> _queue;
     boost::mutex _queueMutex;
     boost::condition_variable_any _msgNotification;
-    std::size_t _numEnqueued;
+    size_t _numEnqueued;
 };
 
 #endif

@@ -83,7 +83,7 @@ protected:
         //assert(ret == _numBufs);
 
         std::list<boost::intrusive_ptr<RefCntBuffer> >::iterator it;
-        for (it = pool.begin(); it != pool.end();)
+        for (it = pool.begin(); it != pool.end(); )
         {
             boost::intrusive_ptr<RefCntBuffer> b = *it;
             b->dead();
@@ -135,12 +135,12 @@ size_t RefCntBufferPool::size()
 ** RefCntBuffer::finalRelease
 **  Used to put unused buffers back on the pool if the pool is still "alive"
 **  If the pool is "dead" then this also releases the memory for each buffer.
-**  A "dead" pool is one that is no longer in use. 
+**  A "dead" pool is one that is no longer in use.
 **
-**  This is stuck in this file because it needs to know the implementation 
+**  This is stuck in this file because it needs to know the implementation
 **  of RefCntBufferPool_
 */
-void RefCntBuffer::finalRelease(IntrusivePtrBase* s) const 
+void RefCntBuffer::finalRelease(IntrusivePtrBase* s) const
 {
     if (_dead == true)
     {
@@ -154,3 +154,4 @@ void RefCntBuffer::finalRelease(IntrusivePtrBase* s) const
         _pool->enqueue(p);
     }
 }
+

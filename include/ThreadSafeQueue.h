@@ -25,11 +25,9 @@
 #define CB_THREAD_SAFE_QUEUE_Hxx
 
 #include <list>
-#ifndef Q_MOC_RUN
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/condition_variable.hpp>
-#include <boost/chrono/chrono.hpp>
-#endif
+#include <mutex>
+#include <condition_variable>
+
 /*
 ** On the wait functions in this class if timeout == -1, then wait forever...
 ** When dequeing a batch of messages, the return code is the total number of bytes
@@ -54,7 +52,7 @@ public:
     virtual void enqueue(const T &data)
     {
         { // create a new scope for the mutex
-            boost::mutex::scoped_lock lock(_queueMutex);
+            std::unique_lock<std::mutex> lock(_queueMutex);
             pushData(data);
             _msgNotification.notify_all();
         }
@@ -64,8 +62,8 @@ public:
     {
         bool ret = false;
         { // create a new scope for the mutex
-            boost::mutex::scoped_lock lock(_queueMutex);
-            waitForData(msTimeout);
+            std::unique_lock<std::mutex> lock(_queueMutex);
+            waitForData(lock, msTimeout);
             ret = popData(data);
         }
         return ret;
@@ -76,8 +74,8 @@ public:
     {
         size_t size = 0;
         { // create a new scope for the mutex
-            boost::mutex::scoped_lock lock(_queueMutex);
-            waitForData(msTimeout);
+            std::unique_lock<std::mutex> lock(_queueMutex);
+            waitForData(lock, msTimeout);
             size = popData(dataVec);
         }
         return size;
@@ -101,7 +99,7 @@ public:
     template <typename Functor> void iterate(Functor functor)
     {
         { // create a new scope for the mutex
-            boost::mutex::scoped_lock lock(_queueMutex);
+            std::unique_lock<std::mutex> lock(_queueMutex);
             // the return value of this functor is added to the _numEnqueued
             // so if you add buffers then return the number of buffers added
             // or if you remove buffers then return -number of buffers removed
@@ -112,27 +110,27 @@ public:
 
 protected:
 
-    void waitForData(const int msTimeout)
+    void waitForData(std::unique_lock<std::mutex>& lock, const int msTimeout)
     {
         if (msTimeout != 0)
         {
             // This function assumes that _queueMutex is locked already!
-            boost::chrono::system_clock::time_point timeLimit = boost::chrono::system_clock::now() + boost::chrono::milliseconds(msTimeout);
+            std::chrono::system_clock::time_point timeLimit = std::chrono::system_clock::now() + std::chrono::milliseconds(msTimeout);
             while (_queue.empty() == true)
             {
                 // if timeout is specified, then wait until the time is up
                 // otherwise wait forever (forever is msTimeout = -1)
                 if (msTimeout > 0)
                 {
-                    _msgNotification.wait_until(_queueMutex, timeLimit);
-                    if (boost::chrono::system_clock::now() >= timeLimit)
+                    _msgNotification.wait_until(lock, timeLimit);
+                    if (std::chrono::system_clock::now() >= timeLimit)
                     {
                         break;
                     }
                 }
                 else
                 {
-                    _msgNotification.wait(_queueMutex);
+                    _msgNotification.wait(lock);
                 }
             }
         }
@@ -178,8 +176,8 @@ protected:
     }
 
     std::list<T> _queue;
-    boost::mutex _queueMutex;
-    boost::condition_variable_any _msgNotification;
+    std::mutex _queueMutex;
+    std::condition_variable _msgNotification;
     size_t _numEnqueued;
 };
 

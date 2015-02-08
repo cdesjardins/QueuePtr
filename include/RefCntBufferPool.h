@@ -33,7 +33,7 @@ public:
     virtual void enqueue(const boost::intrusive_ptr<RefCntBuffer> &data);
     size_t size();
 protected:
-    boost::shared_ptr<RefCntBufferPool_> _pool;
+    std::shared_ptr<RefCntBufferPool_> _pool;
 };
 
 #endif

@@ -28,7 +28,7 @@ class RefCntBufferPool_;
 class RefCntBuffer : public IntrusivePtrBase
 {
 public:
-    RefCntBuffer(boost::shared_ptr<RefCntBufferPool_> pool, const int bufferSize)
+    RefCntBuffer(std::shared_ptr<RefCntBufferPool_> pool, const int bufferSize)
         : _pool(pool),
         _dead(false),
         _bufferSize(bufferSize)
@@ -67,7 +67,7 @@ protected:
     virtual void finalRelease(IntrusivePtrBase* s) const;
 
 private:
-    boost::shared_ptr<RefCntBufferPool_> _pool;
+    std::shared_ptr<RefCntBufferPool_> _pool;
     bool _dead;
     char* _backingData;
     const int _bufferSize;

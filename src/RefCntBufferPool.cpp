@@ -30,9 +30,9 @@
 class RefCntBufferPool_ : public ThreadSafePool<RefCntBuffer>
 {
 public:
-    static boost::shared_ptr<RefCntBufferPool_> createPool(const int initialBufs, const int bufferSize)
+    static std::shared_ptr<RefCntBufferPool_> createPool(const int initialBufs, const int bufferSize)
     {
-        boost::shared_ptr<RefCntBufferPool_> ret(new RefCntBufferPool_());
+        std::shared_ptr<RefCntBufferPool_> ret(new RefCntBufferPool_());
         ret->_sharedThis = ret;
         ret->addToPool(initialBufs, bufferSize);
         return ret;
@@ -92,7 +92,7 @@ protected:
         return -ret;
     }
 
-    boost::shared_ptr<RefCntBufferPool_> _sharedThis;
+    std::shared_ptr<RefCntBufferPool_> _sharedThis;
 };
 
 /*

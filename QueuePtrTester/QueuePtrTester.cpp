@@ -1,8 +1,9 @@
 #include <iostream>
+#include <thread>
 #include "RefCntBufferPool.h"
-#include <boost/thread.hpp>
 
-void useBufs(boost::shared_ptr<RefCntBufferPool> pool)
+
+void useBufs(std::shared_ptr<RefCntBufferPool> pool)
 {
     int failCnt = 0;
     for (int i = 0; i < 1000; i++)
@@ -28,11 +29,11 @@ void useBufs(boost::shared_ptr<RefCntBufferPool> pool)
 
 int main()
 {
-    boost::shared_ptr<RefCntBufferPool> pool(new RefCntBufferPool(700, 1024));
-    boost::thread t0[1024];
+    std::shared_ptr<RefCntBufferPool> pool(new RefCntBufferPool(700, 1024));
+    std::thread t0[1024];
     for (int i = 0; i < (sizeof(t0) / sizeof(t0[0])); i++)
     {
-        t0[i] = boost::thread(boost::bind(useBufs, pool));
+        t0[i] = std::thread(std::bind(useBufs, pool));
     }
     for (int i = 0; i < (sizeof(t0) / sizeof(t0[0])); i++)
     {

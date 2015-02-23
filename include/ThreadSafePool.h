@@ -20,7 +20,7 @@
 #define THREADSAFEPOOL_H
 
 #include "ThreadSafeQueue.h"
-#include <boost/smart_ptr/intrusive_ptr.hpp>
+#include "boost/smart_ptr/intrusive_ptr.hpp"
 
 template <class T> class ThreadSafePool : public ThreadSafeQueue<boost::intrusive_ptr<T> >
 {

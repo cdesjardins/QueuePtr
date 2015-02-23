@@ -20,7 +20,7 @@
 #define REF_CNT_BUFFER_POOL_Hxx
 
 #include "RefCntBuffer.h"
-#include <boost/smart_ptr/intrusive_ptr.hpp>
+#include "boost/smart_ptr/intrusive_ptr.hpp"
 
 class RefCntBufferPool_;
 

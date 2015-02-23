@@ -18,7 +18,6 @@
 */
 #include "RefCntBufferPool.h"
 #include "ThreadSafePool.h"
-#include <boost/bind.hpp>
 
 /*
 ** RefCntBufferPool_
@@ -40,7 +39,7 @@ public:
 
     void destroyPool()
     {
-        iterate(boost::bind(&RefCntBufferPool_::freeBuffers, this, _1));
+        iterate(std::bind(&RefCntBufferPool_::freeBuffers, this, std::placeholders::_1));
         _sharedThis.reset();
     }
 

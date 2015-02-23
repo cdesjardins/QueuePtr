@@ -1,5 +1,6 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.1)
 project (QueuePtr)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+set(BOOST_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../boost/boost_1_57_0)
 add_subdirectory(src)
 add_subdirectory(QueuePtrTester)

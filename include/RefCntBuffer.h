@@ -20,8 +20,8 @@
 #define REF_CNT_BUFFER_Hxx
 
 #include "IntrusivePtrBase.h"
-#include <boost/smart_ptr/shared_ptr.hpp>
-#include <boost/asio/buffer.hpp>
+#include "boost/asio/buffer.hpp"
+#include <memory>
 
 class RefCntBufferPool_;
 

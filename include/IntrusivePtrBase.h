@@ -19,7 +19,7 @@
 #ifndef INTRUSIVE_PTR_BASE_Hxx
 #define INTRUSIVE_PTR_BASE_Hxx
 
-#include <boost/detail/atomic_count.hpp>
+#include <atomic>
 
 struct IntrusivePtrBase
 {
@@ -59,7 +59,7 @@ protected:
     
 private:
     ///should be modifiable even from const intrusive_ptr objects
-    mutable boost::detail::atomic_count _refCount;
+    mutable std::atomic_int _refCount;
 };
 
 #endif

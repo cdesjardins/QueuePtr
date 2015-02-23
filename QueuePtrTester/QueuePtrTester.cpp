@@ -31,11 +31,11 @@ int main()
 {
     std::shared_ptr<RefCntBufferPool> pool(new RefCntBufferPool(700, 1024));
     std::thread t0[1024];
-    for (int i = 0; i < (sizeof(t0) / sizeof(t0[0])); i++)
+    for (size_t i = 0; i < (sizeof(t0) / sizeof(t0[0])); i++)
     {
         t0[i] = std::thread(std::bind(useBufs, pool));
     }
-    for (int i = 0; i < (sizeof(t0) / sizeof(t0[0])); i++)
+    for (size_t i = 0; i < (sizeof(t0) / sizeof(t0[0])); i++)
     {
         t0[i].join();
     }

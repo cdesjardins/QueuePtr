@@ -23,12 +23,13 @@
 
 struct IntrusivePtrBase
 {
-    IntrusivePtrBase(): _refCount(0) 
+    IntrusivePtrBase()
     {
+        _refCount = 0;
     }
     IntrusivePtrBase(IntrusivePtrBase const&)
-        : _refCount(0) 
     {
+        _refCount = 0;
     }
 
     IntrusivePtrBase& operator=(IntrusivePtrBase const& )

@@ -29,8 +29,8 @@ class RefCntBufferPool
 public:
     RefCntBufferPool(const int initialBufs, const int bufferSize);
     virtual ~RefCntBufferPool();
-    virtual bool dequeue(boost::intrusive_ptr<RefCntBuffer> &data, const int msTimeout = 0);
-    virtual void enqueue(const boost::intrusive_ptr<RefCntBuffer> &data);
+    virtual bool dequeue(boost::intrusive_ptr<RefCntBuffer>& data, const int msTimeout = 0);
+    virtual void enqueue(const boost::intrusive_ptr<RefCntBuffer>& data);
     size_t size();
 protected:
     std::shared_ptr<RefCntBufferPool_> _pool;

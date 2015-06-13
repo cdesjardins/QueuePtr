@@ -49,7 +49,7 @@ public:
     {
     }
 
-    virtual void enqueue(const T &data)
+    virtual void enqueue(const T& data)
     {
         { // create a new scope for the mutex
             std::unique_lock<std::mutex> lock(_queueMutex);
@@ -58,7 +58,7 @@ public:
         }
     }
 
-    virtual bool dequeue(T &data, const int msTimeout = 0)
+    virtual bool dequeue(T& data, const int msTimeout = 0)
     {
         bool ret = false;
         { // create a new scope for the mutex
@@ -70,7 +70,7 @@ public:
     }
 
     // Dequeue everything
-    virtual size_t dequeue(std::vector<T> &dataVec, const int msTimeout = 0)
+    virtual size_t dequeue(std::vector<T>& dataVec, const int msTimeout = 0)
     {
         size_t size = 0;
         { // create a new scope for the mutex
@@ -136,14 +136,14 @@ protected:
         }
     }
 
-    void pushData(const T &data)
+    void pushData(const T& data)
     {
         // This function assumes that _queueMutex is locked already!
         _queue.push_back(data);
         _numEnqueued++;
     }
 
-    bool popData(T &data)
+    bool popData(T& data)
     {
         // This function assumes that _queueMutex is locked already!
         bool ret = false;

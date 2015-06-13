@@ -2,7 +2,6 @@
 #include <thread>
 #include "RefCntBufferPool.h"
 
-
 void useBufs(std::shared_ptr<RefCntBufferPool> pool)
 {
     int failCnt = 0;

@@ -27,13 +27,14 @@ struct IntrusivePtrBase
     {
         _refCount = 0;
     }
+
     IntrusivePtrBase(IntrusivePtrBase const&)
     {
         _refCount = 0;
     }
 
-    IntrusivePtrBase& operator=(IntrusivePtrBase const& )
-    { 
+    IntrusivePtrBase& operator=(IntrusivePtrBase const&)
+    {
         return *this;
     }
 
@@ -50,14 +51,14 @@ struct IntrusivePtrBase
         }
     }
 
-    int refcount() const 
-    { 
+    int refcount() const
+    {
         return _refCount;
     }
 
 protected:
     virtual void finalRelease(IntrusivePtrBase* s) const = 0;
-    
+
 private:
     ///should be modifiable even from const intrusive_ptr objects
     mutable std::atomic_int _refCount;

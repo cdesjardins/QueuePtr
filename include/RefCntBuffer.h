@@ -47,7 +47,7 @@ public:
 
     virtual ~RefCntBuffer()
     {
-        delete []_backingData;
+        delete[]_backingData;
     }
 
     boost::asio::mutable_buffer _buffer;

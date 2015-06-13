@@ -47,7 +47,7 @@ public:
     {
     }
 
-    bool dequeue(boost::intrusive_ptr<RefCntBuffer> &data, const int msTimeout = 0)
+    bool dequeue(boost::intrusive_ptr<RefCntBuffer>& data, const int msTimeout = 0)
     {
         bool ret = ThreadSafePool<RefCntBuffer>::dequeue(data, msTimeout);
         // Make sure the buffer is pointing to the start of the allocated block
@@ -72,7 +72,7 @@ protected:
         return bfrPtr;
     }
 
-    int freeBuffers(std::list<boost::intrusive_ptr<RefCntBuffer> > &pool)
+    int freeBuffers(std::list<boost::intrusive_ptr<RefCntBuffer> >& pool)
     {
         int ret = pool.size();
         // Some buffers were not returned, could be a leak,
@@ -114,13 +114,13 @@ RefCntBufferPool::~RefCntBufferPool()
     _pool.reset();
 }
 
-bool RefCntBufferPool::dequeue(boost::intrusive_ptr<RefCntBuffer> &data, const int msTimeout)
+bool RefCntBufferPool::dequeue(boost::intrusive_ptr<RefCntBuffer>& data, const int msTimeout)
 {
     data.reset();
     return _pool->dequeue(data, msTimeout);
 }
 
-void RefCntBufferPool::enqueue(const boost::intrusive_ptr<RefCntBuffer> &data)
+void RefCntBufferPool::enqueue(const boost::intrusive_ptr<RefCntBuffer>& data)
 {
     _pool->enqueue(data);
 }

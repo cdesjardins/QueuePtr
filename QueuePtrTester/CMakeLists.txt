@@ -6,7 +6,7 @@ file(GLOB SRCS
 add_executable(QueuePtrTester ${SRCS})
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    target_link_libraries(QueuePtrTester rt)
+    target_link_libraries(QueuePtrTester rt pthread)
 endif()
 
 # I typically use the "system" layout for boost, which cmake findboost 

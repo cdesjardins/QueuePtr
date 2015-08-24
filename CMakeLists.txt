@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.1)
 project (QueuePtr)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../include")
 include(compilerflags)
-set(BOOST_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../boost/boost_1_58_0)
+set(BOOST_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../boost/boost_1_59_0)
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/../install")
 
 file(GLOB QueuePtr_INCLUDES "include/*.h")

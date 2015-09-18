@@ -5,7 +5,7 @@ include(compilerflags)
 
 file(GLOB boost_dirs ${CMAKE_CURRENT_SOURCE_DIR}/../boost/boost_1_*_0)
 
-find_library(HAVE_BOOST "boost_system" PATHS ${boost_dirs} PATH_SUFFIXES "stage/lib")
+find_library(HAVE_BOOST "boost_system" NAMES "libboost_system" PATHS ${boost_dirs} PATH_SUFFIXES "stage/lib" "stage/release")
 if (NOT HAVE_BOOST)
     MESSAGE(FATAL_ERROR "Need to run the makeboost.py script, could not find boost includes")
 endif()

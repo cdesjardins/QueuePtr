@@ -115,7 +115,8 @@ protected:
         if (msTimeout != 0)
         {
             // This function assumes that _queueMutex is locked already!
-            std::chrono::system_clock::time_point timeLimit = std::chrono::system_clock::now() + std::chrono::milliseconds(msTimeout);
+            std::chrono::system_clock::time_point timeLimit = std::chrono::system_clock::now() +
+                                                              std::chrono::milliseconds(msTimeout);
             while (_queue.empty() == true)
             {
                 // if timeout is specified, then wait until the time is up

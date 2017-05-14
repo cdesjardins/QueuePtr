@@ -153,4 +153,3 @@ void RefCntBuffer::finalRelease(IntrusivePtrBase* s) const
         _pool->enqueue(p);
     }
 }
-

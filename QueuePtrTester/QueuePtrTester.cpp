@@ -39,4 +39,3 @@ int main()
         t0[i].join();
     }
 }
-

@@ -82,7 +82,7 @@ protected:
         //assert(ret == _numBufs);
 
         std::list<boost::intrusive_ptr<RefCntBuffer> >::iterator it;
-        for (it = pool.begin(); it != pool.end(); )
+        for (it = pool.begin(); it != pool.end();)
         {
             boost::intrusive_ptr<RefCntBuffer> b = *it;
             b->dead();
